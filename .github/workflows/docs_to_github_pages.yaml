@@ -1,27 +1,26 @@
-name: Publich the documentation to the github pages 
+name: "Publich the documentation to the github pages"
+
 on:
   workflow_dispatch:
 
 permissions:
   contents: write
+
 jobs:
-  build-and-deploy:
-    concurrency: ci-${{ github.ref }}
-    runs-on: ubuntu-latest
+  publish-docs:
+    name: Publish docs
+    needs: [publish]
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout 🛎️
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
-
-      - name: Install and Build 🔧
       - run: pip install -r requirements-doc.txt
       - run: pip install awscli
       - run: pip install -e .
-      run: make clean html
+      - run: (cd docs && make clean html)
 
-      - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@v4
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs/_build/html
