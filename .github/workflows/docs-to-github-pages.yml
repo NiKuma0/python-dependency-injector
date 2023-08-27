@@ -30,7 +30,6 @@ jobs:
         with:
           python-version: 3.11
       - run: pip install -r requirements-doc.txt
-      - run: pip install awscli
       - run: pip install -e .
       - run: (cd docs && make clean html)
 
