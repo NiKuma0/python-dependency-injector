@@ -19,9 +19,9 @@ jobs:
       - run: pip install -r requirements-doc.txt
       - run: pip install awscli
       - run: pip install -e .
-      - run: (cd docs && make clean html)
+      run: make clean html
 
       - name: Deploy 🚀
-      - uses: JamesIves/github-pages-deploy-action@v4
+      uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs/_build/html
