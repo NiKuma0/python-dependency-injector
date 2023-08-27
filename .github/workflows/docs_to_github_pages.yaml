@@ -1,20 +1,30 @@
-name: "Publich the documentation to the github pages"
+# Simple workflow for deploying static content to GitHub Pages
+name: Publich docs to github pages
 
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - '*'
+    branches: ["master"]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  publish-docs:
-    name: Publish docs
-    runs-on: ubuntu-22.04
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+    
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
@@ -23,6 +33,11 @@ jobs:
       - run: pip install -e .
       - run: (cd docs && make clean html)
 
-      - uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          folder: docs/_build/html
+          path: 'docs/_build/html'
+    
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
