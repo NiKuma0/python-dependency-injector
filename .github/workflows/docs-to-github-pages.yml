@@ -3,7 +3,8 @@ name: Publich docs to github pages
 
 on:
   push:
-    branches: ["master"]
+    tags:
+      - '*'
   workflow_dispatch:
 
 permissions:
