@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     tags:
+      - '!feature/docs_to_githhub_pages'
       - '*'
 
 jobs:
